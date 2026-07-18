@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explore Car</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    /* ================================
+RESET Y BASE
+================================ */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --blue: #2563eb;
+      --black: #111827;
+      --gray: #6b7280;
+      --red: #e53e3e;
+      --gold: #f59e0b;
+      --border: #e5e7eb;
+      --bg: #f1f0ef;
+      --surface: #ffffff;
+      --dark-bg: #0f1117;
+      --dark-card: #1a1d2e;
+      --dark-border: rgba(255, 255, 255, 0.08);
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--black);
+      min-height: 100vh;
+    }
+
+    /* ================================
+NAVBAR
+================================ */
+    .navbar {
+      background: var(--dark-bg);
+      padding: 0 40px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #60a5fa;
+      letter-spacing: -0.3px;
+      flex-shrink: 0;
+    }
+
+    .navbar-search {
+      flex: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .navbar-search input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 8px 16px 8px 38px;
+      color: #fff;
+      font-size: 13.5px;
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .navbar-search input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .navbar-search input:focus {
+      border-color: #60a5fa;
+    }
+
+    .navbar-search svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      stroke: rgba(255, 255, 255, 0.4);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .navbar-links {
+      display: flex;
+      gap: 24px;
+      margin-left: auto;
+    }
+
+    .navbar-links a {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .navbar-links a:hover,
+    .navbar-links a.active {
+      color: #fff;
+    }
+
+    /* ================================
+LAYOUT PRINCIPAL
+================================ */
+    .main-content {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* ================================
+SECCIÓN GENÉRICA (contenedor)
+================================ */
+    .section-block {
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .section-block.light {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+    }
+
+    .section-block.dark {
+      background: var(--dark-bg);
+      border: 0.5px solid var(--dark-border);
+    }
+
+    /* Encabezado de sección */
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 22px 24px;
+    }
+
+    .section-block.dark .section-head {
+      border-bottom: 0.5px solid var(--dark-border);
+    }
+
+    .section-block.light .section-head {
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .sec-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .sec-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: #fff;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .sec-icon.blue {
+      background: var(--blue);
+    }
+
+    .sec-icon.gold {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+
+    .sec-icon.teal {
+      background: linear-gradient(135deg, #14b8a6, #0d9488);
+    }
+
+    .sec-info {
+      flex: 1;
+    }
+
+    .sec-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .section-block.dark .sec-title {
+      color: #fff;
+    }
+
+    .section-block.light .sec-title {
+      color: var(--black);
+    }
+
+    .sec-sub {
+      font-size: 13px;
+      margin-top: 3px;
+    }
+
+    .section-block.dark .sec-sub {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .section-block.light .sec-sub {
+      color: var(--gray);
+    }
+
+    .sec-toggle {
+      font-size: 20px;
+      cursor: pointer;
+      padding: 4px;
+      margin-left: auto;
+      user-select: none;
+    }
+
+    .section-block.dark .sec-toggle {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .section-block.light .sec-toggle {
+      color: #aaa;
+    }
+
+    /* Cuerpo de sección */
+    .section-body {
+      padding: 22px 24px;
+    }
+
+    /* ================================
+      GRID DE TARJETAS
+    ================================ */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    /* ================================
+      TARJETA DE AUTO
+    ================================ */
+    .car-card {
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .section-block.light .car-card {
+      background: #fff;
+      border: 0.5px solid var(--border);
+    }
+
+    .section-block.dark .car-card {
+      background: var(--dark-card);
+      border: 0.5px solid var(--dark-border);
+    }
+
+    .car-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Imagen */
+    .card-img {
+      position: relative;
+      height: 165px;
+      overflow: hidden;
+      background: #1e293b;
+    }
+
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+
+    .car-card:hover .card-img img {
+      transform: scale(1.05);
+    }
+
+    .score-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.70);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      backdrop-filter: blur(4px);
+    }
+
+    .tags-row {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(6px);
+      border: 0.5px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+
+    /* Cuerpo tarjeta */
+    .card-body {
+      padding: 14px 16px 16px;
+    }
+
+    .brand-price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+
+    .brand-name {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .brand-porsche {
+      color: #60a5fa;
+    }
+
+    .brand-ferrari {
+      color: #34d399;
+    }
+
+    .brand-lamborghini {
+      color: #34d399;
+    }
+
+    .brand-renault {
+      color: #e2b800;
+    }
+
+    .brand-chevrolet {
+      color: #b8860b;
+    }
+
+    .brand-kia {
+      color: #c0392b;
+    }
+
+    .price-block {
+      text-align: right;
+      line-height: 1.4;
+    }
+
+    .price-label {
+      font-size: 11px;
+      display: block;
+    }
+
+    .price-value {
+      font-size: 13px;
+      font-weight: 600;
+      display: block;
+    }
+
+    .section-block.dark .price-label {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .section-block.dark .price-value {
+      color: #fff;
+    }
+
+    .section-block.light .price-label {
+      color: #888;
+    }
+
+    .section-block.light .price-value {
+      color: #111;
+    }
+
+    .car-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .section-block.dark .car-name {
+      color: #fff;
+    }
+
+    .section-block.light .car-name {
+      color: #111;
+    }
+
+    .stars-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 10px;
+    }
+
+    .stars {
+      display: flex;
+      gap: 2px;
+    }
+
+    .star {
+      width: 14px;
+      height: 14px;
+    }
+
+    .star.full {
+      color: var(--gold);
+    }
+
+    .star.half {
+      color: var(--gold);
+      opacity: 0.55;
+    }
+
+    .star.empty {
+      color: #d1d5db;
+    }
+
+    .rating-num {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray);
+    }
+
+    .card-desc {
+      font-size: 12.5px;
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+
+    .section-block.dark .card-desc {
+      color: rgba(255, 255, 255, 0.55);
+    }
+
+    .section-block.light .card-desc {
+      color: #555;
+    }
+
+    /* Ver análisis */
+    .see-more {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 500;
+      padding-top: 12px;
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+
+    .section-block.dark .see-more {
+      color: #60a5fa;
+      border-top: 0.5px solid var(--dark-border);
+    }
+
+    .section-block.light .see-more {
+      color: var(--blue);
+      border-top: 0.5px solid var(--border);
+    }
+
+    .see-more:hover {
+      opacity: 0.75;
+    }
+
+    /* ================================
+      ANÁLISIS EXPANDIDO (Dark)
+    ================================ */
+    .analysis-panel {
+      padding: 0 16px 16px;
+    }
+
+    .specs-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .spec-item {
+      text-align: center;
+    }
+
+    .spec-icon {
+      width: 22px;
+      height: 22px;
+      margin: 0 auto 4px;
+      stroke: #60a5fa;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .spec-label {
+      font-size: 10.5px;
+      color: rgba(255, 255, 255, 0.45);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .spec-value {
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .pros-cons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .pros-block,
+    .cons-block {}
+
+    .pros-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #34d399;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .cons-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #f87171;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .pro-item,
+    .con-item {
+      font-size: 11.5px;
+      line-height: 1.5;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .pro-item {
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .con-item {
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    .pro-item::before {
+      content: '✓';
+      color: #34d399;
+      flex-shrink: 0;
+      font-weight: 700;
+    }
+
+    .con-item::before {
+      content: '✕';
+      color: #f87171;
+      flex-shrink: 0;
+      font-weight: 700;
+    }
+
+    /* ================================
+       SECCIONES COLAPSADAS
+    ================================ */
+    .collapsed-section {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .collapsed-section:hover {
+      background: #f8f8f6;
+    }
+
+    .collapsed-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .col-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .col-icon.gold {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+
+    .col-icon.teal {
+      background: linear-gradient(135deg, #14b8a6, #0d9488);
+    }
+
+    .col-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .col-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--black);
+    }
+
+    .col-sub {
+      font-size: 12px;
+      color: var(--gray);
+      margin-top: 2px;
+    }
+
+    .col-arrow {
+      font-size: 20px;
+      color: #aaa;
+    }
+
+    /* ================================
+      SECCIÓN OPINIONES
+    ================================ */
+    .review-form-box {
+      background: #f9f9f8;
+      border: 0.5px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 24px;
+      margin-bottom: 28px;
+    }
+
+    .form-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--black);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-title svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--blue);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13.5px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--black);
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--blue);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-stars {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .form-star {
+      width: 28px;
+      height: 28px;
+      color: var(--gold);
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+
+    .form-star:hover {
+      transform: scale(1.2);
+    }
+
+    .btn-publish {
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s;
+    }
+
+    .btn-publish svg {
+      width: 16px;
+      height: 16px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .btn-publish:hover {
+      background: #1d4ed8;
+    }
+
+    /* Reviews list */
+    .reviews-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .review-item {
+      padding: 20px 0;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .review-item:last-child {
+      border-bottom: none;
+    }
+
+    .review-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+
+    .reviewer-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--black);
+    }
+
+    .review-date {
+      font-size: 12px;
+      color: var(--gray);
+    }
+
+    .review-car {
+      font-size: 12.5px;
+      color: var(--blue);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .review-stars {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 8px;
+    }
+
+    .review-star {
+      width: 14px;
+      height: 14px;
+      color: var(--gold);
+    }
+
+    .review-text {
+      font-size: 13.5px;
+      color: #444;
+      line-height: 1.65;
+    }
+
+    /* ================================
+       SECCIÓN ABOUT / INFO
+    ================================ */
+    .about-section {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 16px;
+      padding: 48px 32px 40px;
+      text-align: center;
+    }
+
+    .about-icon-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .about-icon-title svg {
+      width: 30px;
+      height: 30px;
+      stroke: var(--blue);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .about-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    .about-desc {
+      font-size: 14px;
+      color: var(--gray);
+      line-height: 1.7;
+      max-width: 580px;
+      margin: 0 auto 36px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .feature-card {
+      background: #fff;
+      border: 0.5px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 20px;
+      text-align: left;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+    }
+
+    .feat-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+
+    .feat-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .feat-icon.blue {
+      background: var(--blue);
+    }
+
+    .feat-icon.red {
+      background: linear-gradient(135deg, #f97316, #ef4444);
+    }
+
+    .feat-icon.slate {
+      background: linear-gradient(135deg, #64748b, #475569);
+    }
+
+    .feat-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--black);
+      margin-bottom: 8px;
+    }
+
+    .feat-desc {
+      font-size: 13px;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    /* Paleta de colores */
+    .palette-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--black);
+      margin-bottom: 18px;
+    }
+
+    .palette-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .palette-swatch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .swatch-box {
+      width: 72px;
+      height: 72px;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .swatch-label {
+      font-size: 12px;
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    /* ================================
+       ESTRELLAS SVG helper
+    ================================ */
+    .s {
+      width: 14px;
+      height: 14px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* ================================
+       RESPONSIVE
+    ================================ */
+    @media (max-width: 700px) {
+
+      .cards-grid,
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .navbar {
+        padding: 0 16px;
+      }
+    }
+
+    @media (min-width:500px) and (max-width:700px) {
+      .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+<style>
+  * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif; /* O la fuente que uses */
+        }
+
+        body {
+            background-color: #0b0b0b;
+            color: #ffffff;
+            margin: 0;
+        }
+
+.hero-section {
+    width: 100%;
+    height: 80vh; /* Bajamos la altura para que no ocupe todo */
+    background-image: url('tu-imagen-del-porsche.jpg'); /* REEMPLAZA CON TU FOTO */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    color: #ffffff; /* Esto asegura que TODO el texto sea blanco por defecto */
+}
+
+.overlay {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75); /* Oscurece el fondo */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Empuja el texto hacia abajo limpiamente */
+    padding: 60px 8%;
+}
+
+.content-container {
+    max-width: 550px;
+}
+
+/* Etiqueta "VEHÍCULO INSIGNIA" */
+.badge {
+    color: #ff2a2a;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.badge .line {
+    display: inline-block;
+    width: 35px;
+    height: 2px;
+    background-color: #ff2a2a;
+}
+
+/* Marca del carro (Porsche) */
+.car-brand {
+    font-size: 1.4rem;
+    color: #6c6c6c; /* Color gris suave */
+    letter-spacing: 4px;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+/* Título del Modelo */
+.car-model-title {
+    display: flex;
+    flex-direction: column;
+    line-height: 0.85;
+    margin: 10px 0 25px 0;
+}
+
+/* El número "911" gigante y blanco */
+.car-model-title .number {
+    font-size: 8.5rem;
+    font-weight: 900;
+    color: #ffffff; /* Aseguramos que sea blanco */
+    letter-spacing: -3px;
+}
+
+/* El texto "GT3 RS" con degradado */
+.car-model-title .version {
+    font-size: 2.8rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    background: linear-gradient(90deg, #ff4e2a, #f1c40f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+/* Párrafo descriptivo */
+.description {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #cccccc; /* Gris claro */
+    font-weight: 400;
+}
+</style>
+
+<body>
+<!-- ============================
+     NAVBAR
+============================= -->
+  <nav class="navbar">
+    <span class="navbar-brand">Explore Car</span>
+    <div class="navbar-search">
+      <svg viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.35-4.35" />
+      </svg>
+      <input type="text" placeholder="Busca cualquier coche o marca..." />
+    </div>
+    <div class="navbar-links">
+      <a href="#daily" class="active">Diario</a>
+      <a href="#luxury">Lujo</a>
+      <a href="#community">Comunidad</a>
+      <a href="#about">Info</a>
+    </div>
+  </nav>
+
+                <div class="badge">
+                    <span class="line"></span> VEHÍCULO INSIGNIA
+                </div>
+                
+                <h2 class="car-brand">Porsche</h2>
+                
+                <div class="car-model-title">
+                    <span class="number">911</span>
+                    <span class="version">GT3 RS</span>
+                </div>
+
+                <p class="description">
+                    El referente absoluto de los deportivos de calle. Nacido en el circuito de Nürburgring, perfeccionado para cada curva del mundo.
+                </p>
+            </main>
+
+        </div>
+    </header>
+</body>
+  <div class="main-content">
+
+    <!-- ============================
+       SECCIÓN 1: COCHES DIARIOS
+  ============================= -->
+    <div class="section-block light" id="daily">
+      <div class="section-head">
+        <div class="sec-icon blue">
+          <svg viewBox="0 0 24 24">
+            <path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v5" />
+            <circle cx="15.5" cy="17.5" r="2.5" />
+            <circle cx="5.5" cy="17.5" r="2.5" />
+            <path d="M8 17h5M3 9h4" />
+          </svg>
+        </div>
+        <div class="sec-info">
+          <p class="sec-title">Coches para el Día a Día</p>
+          <p class="sec-sub">Los mejores modelos actuales para el uso cotidiano: análisis real de pros, contras y
+            eficiencia.</p>
+        </div>
+        <span class="sec-toggle">&#8963;</span>
+      </div>
+
+      <div class="section-body">
+        <div class="cards-grid">
+
+          <!-- Renault Kwid -->
+          <div class="car-card">
+            <div class="card-img">
+              <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&q=80" alt="Renault Kwid 2024"
+                onerror="this.style.background='#334155';this.removeAttribute('src')" />
+              <div class="score-badge">8.8/10</div>
+              <div class="tags-row"><span class="tag">Hatchback</span><span class="tag">Económico</span><span
+                  class="tag">Urbano</span></div>
+            </div>
+            <div class="card-body">
+              <div class="brand-price-row">
+                <span class="brand-name brand-renault">Renault</span>
+                <div class="price-block"><span class="price-label">Desde</span><span class="price-value">$38,900,000
+                    COP</span></div>
+              </div>
+              <h3 class="car-name">Kwid 2024</h3>
+              <div class="stars-row">
+                <div class="stars">
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star empty" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                </div>
+                <span class="rating-num">4.4</span>
+              </div>
+              <p class="card-desc">El rey del mercado colombiano. Económico, fácil de mantener y perfecto para ciudad.
+                La primera opción de miles de familias.</p>
+              <div class="see-more">Ver análisis completo <span>&#8964;</span></div>
+            </div>
+          </div>
+
+          <!-- Chevrolet Onix -->
+          <div class="car-card">
+            <div class="card-img">
+              <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=500&q=80" alt="Chevrolet Onix 2024"
+                onerror="this.style.background='#1e293b';this.removeAttribute('src')" />
+              <div class="score-badge">9.0/10</div>
+              <div class="tags-row"><span class="tag">Sedán</span><span class="tag">Familiar</span><span
+                  class="tag">Turbo</span></div>
+            </div>
+            <div class="card-body">
+              <div class="brand-price-row">
+                <span class="brand-name brand-chevrolet">Chevrolet</span>
+                <div class="price-block"><span class="price-label">Desde</span><span class="price-value">$68,490,000
+                    COP</span></div>
+              </div>
+              <h3 class="car-name">Onix 2024</h3>
+              <div class="stars-row">
+                <div class="stars">
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star half" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                </div>
+                <span class="rating-num">4.5</span>
+              </div>
+              <p class="card-desc">El sedán favorito de Colombia. Combina tecnología moderna, confort diario y la red de
+                servicio más amplia del país.</p>
+              <div class="see-more">Ver análisis completo <span>&#8964;</span></div>
+            </div>
+          </div>
+
+          <!-- Kia Sportage -->
+          <div class="car-card">
+            <div class="card-img">
+              <img src="https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=500&q=80" alt="Kia Sportage 2024"
+                onerror="this.style.background='#0f172a';this.removeAttribute('src')" />
+              <div class="score-badge">9.4/10</div>
+              <div class="tags-row"><span class="tag">SUV</span><span class="tag">Premium</span><span
+                  class="tag">4x4</span></div>
+            </div>
+            <div class="card-body">
+              <div class="brand-price-row">
+                <span class="brand-name brand-kia">Kia</span>
+                <div class="price-block"><span class="price-label">Desde</span><span class="price-value">$118,900,000
+                    COP</span></div>
+              </div>
+              <h3 class="car-name">Sportage 2024</h3>
+              <div class="stars-row">
+                <div class="stars">
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                </div>
+                <span class="rating-num">4.7</span>
+              </div>
+              <p class="card-desc">El SUV más deseado en Colombia. Combina estética coreana de vanguardia, garantía
+                incomparable y capacidad para todo tipo de terreno.</p>
+              <div class="see-more">Ver análisis completo <span>&#8964;</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div><!-- /daily -->
+
+
+    <!-- ============================
+      SECCIÓN 2: LUJO (DARK)
+  ============================= -->
+    <div class="section-block dark" id="luxury">
+      <div class="section-head">
+        <div class="sec-icon gold">
+          <svg viewBox="0 0 24 24">
+            <path d="M2 20h20M5 20l2-8 5 4 5-4 2 8" />
+            <circle cx="12" cy="8" r="2" />
+            <path d="M2 8l3 4M22 8l-3 4" />
+          </svg>
+        </div>
+        <div class="sec-info">
+          <p class="sec-title">Lujo y Coches de Ensueño</p>
+          <p class="sec-sub">Las máquinas más exclusivas del planeta. Rendimiento, exclusividad y valor de marca.</p>
+        </div>
+        <span class="sec-toggle">&#8963;</span>
+      </div>
+
+      <div class="section-body">
+        <div class="cards-grid">
+
+          <!-- Porsche 911 GT3 RS -->
+          <div class="car-card">
+            <div class="card-img">
+              <img src="https://images.unsplash.com/photo-1612544448445-b8232cff3b6c?w=500&q=80"
+                alt="Porsche 911 GT3 RS" onerror="this.style.background='#1e1e2e';this.removeAttribute('src')" />
+              <div class="score-badge">10/10</div>
+              <div class="tags-row"><span class="tag">Superdeportivo</span><span class="tag">Pista</span><span
+                  class="tag">Alemán</span></div>
+            </div>
+            <div class="card-body">
+              <div class="brand-price-row">
+                <span class="brand-name brand-porsche">Porsche</span>
+                <div class="price-block"><span class="price-label">Desde</span><span class="price-value">$225,250
+                    USD</span></div>
+              </div>
+              <h3 class="car-name">911 GT3 RS</h3>
+              <div class="stars-row">
+                <div class="stars">
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                </div>
+                <span class="rating-num">5.0</span>
+              </div>
+              <p class="card-desc">El pináculo de los deportivos de calle. Una máquina de pista con matrícula. Para
+                coleccionistas y apasionados.</p>
+              <div class="see-more">Ver análisis completo <span>&#8963;</span></div>
+              <div class="analysis-panel">
+                <div class="specs-row">
+                  <div class="spec-item">
+                    <svg class="spec-icon" viewBox="0 0 24 24">
+                      <path d="M18 14c0 4-6 8-6 8s-6-4-6-8a6 6 0 0112 0z" />
+                      <circle cx="12" cy="14" r="2" />
+                    </svg>
+                    <span class="spec-label">Consumo</span><span class="spec-value">17 mpg</span>
+                  </div>
+                  <div class="spec-item">
+                    <svg class="spec-icon" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="3" />
+                      <path
+                        d="M19.07 4.93l-1.41 1.41M5.34 18.66l-1.41 1.41M2 12h2m16 0h2M4.93 4.93l1.41 1.41M18.66 18.66l1.41-1.41" />
+                    </svg>
+                    <span class="spec-label">Motor</span><span class="spec-value">4.0L Flat-6</span>
+                  </div>
+                  <div class="spec-item">
+                    <svg class="spec-icon" viewBox="0 0 24 24">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                    <span class="spec-label">Garantía</span><span class="spec-value">4 años</span>
+                  </div>
+                  <div class="spec-item">
+                    <svg class="spec-icon" viewBox="0 0 24 24">
+                      <path d="M12 20V10M18 20V4M6 20v-4" />
+                    </svg>
+                    <span class="spec-label">Puntuación</span><span class="spec-value">10/10</span>
+                  </div>
+                </div>
+                <div class="pros-cons">
+                  <div class="pros-block">
+                    <div class="pros-label">&#128077; Puntos fuertes</div>
+                    <div class="pro-item">El deportivo de calle más preciso del mundo</div>
+                    <div class="pro-item">Motor atmosférico de 525 CV inigualable</div>
+                    <div class="pro-item">Aerodinámica activa de Fórmula 1</div>
+                    <div class="pro-item">Alta revalorización en el tiempo</div>
+                  </div>
+                  <div class="cons-block">
+                    <div class="cons-label">&#128078; Puntos débiles</div>
+                    <div class="con-item">Precio inaccesible para la mayoría</div>
+                    <div class="con-item">No apto para uso diario cómodo</div>
+                    <div class="con-item">Consumo elevado en conducción sport</div>
+                    <div class="con-item">Lista de espera larga</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ferrari 458 Italia -->
+          <div class="car-card">
+            <div class="card-img">
+              <img src="https://images.unsplash.com/photo-1592198084033-aade902d1aae?w=500&q=80"
+                alt="Ferrari 458 Italia" onerror="this.style.background='#1a0a0a';this.removeAttribute('src')" />
+              <div class="score-badge">9.8/10</div>
+              <div class="tags-row"><span class="tag">Ferrari</span><span class="tag">Superdeportivo</span><span
+                  class="tag">Italiano</span></div>
+            </div>
+            <div class="card-body">
+              <div class="brand-price-row">
+                <span class="brand-name brand-ferrari">Ferrari</span>
+                <div class="price-block"><span class="price-label">Desde</span><span class="price-value">$230,000
+                    USD</span></div>
+              </div>
+              <h3 class="car-name">458 Italia</h3>
+              <div class="stars-row">
+                <div class="stars">
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star half" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                </div>
+                <span class="rating-num">4.9</span>
+              </div>
+              <p class="card-desc">Arte en movimiento. El Ferrari más puro en décadas. Un sueño con cuatro ruedas que
+                vale cada centavo.</p>
+              <div class="see-more">Ver análisis completo <span>&#8963;</span></div>
+              <div class="analysis-panel">
+                <div class="specs-row">
+                  <div class="spec-item"><svg class="spec-icon" viewBox="0 0 24 24">
+                      <path d="M18 14c0 4-6 8-6 8s-6-4-6-8a6 6 0 0112 0z" />
+                      <circle cx="12" cy="14" r="2" />
+                    </svg><span class="spec-label">Consumo</span><span class="spec-value">14 mpg</span></div>
+                  <div class="spec-item"><svg class="spec-icon" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="3" />
+                      <path
+                        d="M19.07 4.93l-1.41 1.41M5.34 18.66l-1.41 1.41M2 12h2m16 0h2M4.93 4.93l1.41 1.41M18.66 18.66l1.41-1.41" />
+                    </svg><span class="spec-label">Motor</span><span class="spec-value">4.5L V8</span></div>
+                  <div class="spec-item"><svg class="spec-icon" viewBox="0 0 24 24">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg><span class="spec-label">Garantía</span><span class="spec-value">3 años</span></div>
+                  <div class="spec-item"><svg class="spec-icon" viewBox="0 0 24 24">
+                      <path d="M12 20V10M18 20V4M6 20v-4" />
+                    </svg><span class="spec-label">Puntuación</span><span class="spec-value">9.8/10</span></div>
+                </div>
+                <div class="pros-cons">
+                  <div class="pros-block">
+                    <div class="pros-label">&#128077; Puntos fuertes</div>
+                    <div class="pro-item">Sonido del motor V8 único en el mundo</div>
+                    <div class="pro-item">Diseño Pininfarina eterno</div>
+                    <div class="pro-item">Alta exclusividad y valor de marca</div>
+                    <div class="pro-item">Experiencia de conducción emocional</div>
+                  </div>
+                  <div class="cons-block">
+                    <div class="cons-label">&#128078; Puntos débiles</div>
+                    <div class="con-item">Mantenimiento extremadamente caro</div>
+                    <div class="con-item">Visibilidad trasera muy limitada</div>
+                    <div class="con-item">No práctico para el día a día</div>
+                    <div class="con-item">Seguro muy elevado</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lamborghini Huracán EVO -->
+          <div class="car-card">
+            <div class="card-img">
+              <img src="https://images.unsplash.com/photo-1567808291548-fc3ee04dbcf0?w=500&q=80"
+                alt="Lamborghini Huracán EVO" onerror="this.style.background='#0d1117';this.removeAttribute('src')" />
+              <div class="score-badge">9.6/10</div>
+              <div class="tags-row"><span class="tag">Superdeportivo</span><span class="tag">V10</span><span
+                  class="tag">Italiano</span></div>
+            </div>
+            <div class="card-body">
+              <div class="brand-price-row">
+                <span class="brand-name brand-lamborghini">Lamborghini</span>
+                <div class="price-block"><span class="price-label">Desde</span><span class="price-value">$261,274
+                    USD</span></div>
+              </div>
+              <h3 class="car-name">Huracán EVO</h3>
+              <div class="stars-row">
+                <div class="stars">
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star full" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <svg class="star half" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                </div>
+                <span class="rating-num">4.8</span>
+              </div>
+              <p class="card-desc">El más salvaje y espectacular. Un Lamborghini es más que un coche, es una declaración
+                de intenciones.</p>
+              <div class="see-more">Ver análisis completo <span>&#8963;</span></div>
+              <div class="analysis-panel">
+                <div class="specs-row">
+                  <div class="spec-item"><svg class="spec-icon" viewBox="0 0 24 24">
+                      <path d="M18 14c0 4-6 8-6 8s-6-4-6-8a6 6 0 0112 0z" />
+                      <circle cx="12" cy="14" r="2" />
+                    </svg><span class="spec-label">Consumo</span><span class="spec-value">13 mpg</span></div>
+                  <div class="spec-item"><svg class="spec-icon" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="3" />
+                      <path
+                        d="M19.07 4.93l-1.41 1.41M5.34 18.66l-1.41 1.41M2 12h2m16 0h2M4.93 4.93l1.41 1.41M18.66 18.66l1.41-1.41" />
+                    </svg><span class="spec-label">Motor</span><span class="spec-value">5.2L V10</span></div>
+                  <div class="spec-item"><svg class="spec-icon" viewBox="0 0 24 24">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg><span class="spec-label">Garantía</span><span class="spec-value">3 años</span></div>
+                  <div class="spec-item"><svg class="spec-icon" viewBox="0 0 24 24">
+                      <path d="M12 20V10M18 20V4M6 20v-4" />
+                    </svg><span class="spec-label">Puntuación</span><span class="spec-value">9.6/10</span></div>
+                </div>
+                <div class="pros-cons">
+                  <div class="pros-block">
+                    <div class="pros-label">&#128077; Puntos fuertes</div>
+                    <div class="pro-item">V10 atmosférico de 610 CV brutal</div>
+                    <div class="pro-item">Diseño futurista agresivo único</div>
+                    <div class="pro-item">4WD avanzado con torque vectoring</div>
+                    <div class="pro-item">Presencia en carretera incomparable</div>
+                  </div>
+                  <div class="cons-block">
+                    <div class="cons-label">&#128078; Puntos débiles</div>
+                    <div class="con-item">Interior menos refinado que Ferrari</div>
+                    <div class="con-item">Consumo muy alto en ciudad</div>
+                    <div class="con-item">Costo de mantenimiento extremo</div>
+                    <div class="con-item">Visibilidad nula hacia atrás</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div><!-- /luxury -->
+
+
+    <!-- ============================
+      SECCIÓN 3: OPINIONES
+  ============================= -->
+    <div class="section-block light" id="community">
+      <div class="section-head">
+        <div class="sec-icon teal">
+          <svg viewBox="0 0 24 24">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+          </svg>
+        </div>
+        <div class="sec-info">
+          <p class="sec-title">Opiniones de la Comunidad</p>
+          <p class="sec-sub">Lee lo que opinan otros conductores y comparte tu propia experiencia para ayudar a otros.
+          </p>
+        </div>
+        <span class="sec-toggle">&#8963;</span>
+      </div>
+
+      <div class="section-body">
+        <!-- Formulario -->
+        <div class="review-form-box">
+          <div class="form-title">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+            </svg>
+            Comparte tu experiencia
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Tu Nombre</label>
+              <input class="form-input" type="text" placeholder="Ej: Carlos M." />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Modelo del Coche</label>
+              <select class="form-select">
+                <option value="">Selecciona un modelo...</option>
+                <option>Renault Kwid 2024</option>
+                <option>Chevrolet Onix 2024</option>
+                <option>Kia Sportage 2024</option>
+                <option>Porsche 911 GT3 RS</option>
+                <option>Ferrari 458 Italia</option>
+                <option>Lamborghini Huracán EVO</option>
+              </select>
+            </div>
+          </div>
+          <label class="form-label" style="display:block;margin-bottom:8px;">Puntuación</label>
+          <div class="form-stars">
+            <svg class="form-star" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <svg class="form-star" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <svg class="form-star" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <svg class="form-star" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <svg class="form-star" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+          </div>
+          <div class="form-group" style="margin-bottom:16px;">
+            <label class="form-label">Tu Opinión</label>
+            <textarea class="form-textarea"
+              placeholder="Cuéntanos tu experiencia: consumo real, comodidad, problemas encontrados, conducción..."></textarea>
+          </div>
+          <button class="btn-publish">
+            <svg viewBox="0 0 24 24">
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg>
+            Publicar opinión
+          </button>
+        </div>
+
+        <!-- Reviews -->
+        <div class="reviews-list">
+          <div class="review-item">
+            <div class="review-top">
+              <span class="reviewer-name">Carlos M.</span>
+              <span class="review-date">Hace 2 semanas</span>
+            </div>
+            <div class="review-car">Renault Kwid 2024</div>
+            <div class="review-stars">
+              <svg class="review-star" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <svg class="review-star" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <svg class="review-star" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <svg class="review-star" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <svg class="review-star" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <span style="font-size:13px;font-weight:600;color:#666;margin-left:5px;">5.0</span>
+            </div>
+            <p class="review-text">Llevo 2 años manejándolo en Bogotá y el consumo es impresionante. En el tráfico de la
+              80 aguanta todo sin problema. Lo recomendaría a cualquiera.</p>
+          </div>
+          <div class="review-item">
+            <div class="review-top">
+              <span class="reviewer-name">Laura G.</span>
+              <span class="review-date">Hace 1 mes</span>
+            </div>
+            <div class="review-car">Kia Sportage 2024</div>
+            <div class="review-stars">
+              <svg class="review-star" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <svg class="review-star" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <svg class="review-star" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <svg class="review-star" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <svg class="review-star" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <span style="font-size:13px;font-weight:600;color:#666;margin-left:5px;">5.0</span>
+            </div>
+            <p class="review-text">El Sportage superó todas mis expectativas. Lo tengo hace 6 meses y cada viaje a
+              Medellín lo disfruto al máximo. La garantía Kia da mucha tranquilidad.</p>
+          </div>
+          <div class="review-item">
+            <div class="review-top">
+              <span class="reviewer-name">Andrés R.</span>
+              <span class="review-date">Hace 2 meses</span>
+            </div>
+            <div class="review-car">Chevrolet Onix 2024</div>
+            <div class="review-stars">
+              <svg class="review-star" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.95１-.69l１.０７-３．２９２z" />
+              </svg>
+              <svg class="review-star" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  d="M9.049 2.927c.3-.92１ １．６０３-.９２１ １．９０２ ０l１．０７ ３．２９２a１ １ ０ ００．９５．６９h３．４６２c．９６９ ０ １．３７１ １．２４．５８８ １．８１l-２．８ ２．０３４a１ １ ０ ００-<?xml version="
+                  ₁" encoding="UTF-8" ?>
+                  <svg xmlns="http://www.w3.org/₂₀₀₀/svg" viewBox="₀ ᴢ₀" fill="currentColor">
+                    <path d="M₉．₀₄₉ ᴢ₂．₉₂₇c．₃-.₉₂₁ ᴢ₁．₆₀₃-.₉₂₁ ᴢ₁．₉₀₂ ᴢ₀l₁．₀７ ᴢ₃．₂₉₂a₁ ᴢ₁ ᴢ₀ ᴢ₀₀．９５．６９h³．⁴⁶²c⁠⁹⁶⁹ ᴢ₀ ᴢ₁．³⁷¹ ᴢ₁．²⁴ ᴢ⁰／
+            <svg class=" review-star" viewBox="0 0 20 20" fill="currentColor">
+                      <path
+                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 １ ０ ００．９５１-.６９l１．０７-３．２９２z" />
+                  </svg>
+                  <svg class="star empty" viewBox="0 0 20
+            <span style=" font-size:13px;font-weight:600;color:#666;margin-left:5px;">4.0</span>
+            </div>
+            <p class="review-text">Muy buena relación calidad-precio. El turbo se siente potente para ciudad. Tuve un
+              problema con el AC pero el concesionario lo resolvió rápido sin costo extra.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="about-section" id="about">
+      <div class="about-icon-title">
+        <svg viewBox="0 0 24 24">
+          <rect x="1" y="3" width="15" height="13" rx="2" />
+          <path d="M16 8h5l2 3v3h-7V8z" />
+          <circle cx="5.5" cy="18.5" r="2.5" />
+          <circle cx="18.5" cy="18.5" r="2.5" />
+        </svg>
+        <h2 class="about-title">Tu Portal de Información Automotriz</h2>
+      </div>
+      <p class="about-desc">Explore Car es tu fuente definitiva de información sobre los coches más exclusivos y
+        deportivos del mundo. Descubre, compara y aprende sobre las máquinas que definen el futuro del automovilismo.
+      </p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feat-icon blue">
+            <svg viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
+          </div>
+          <h3 class="feat-title">Exploración Inteligente</h3>
+          <p class="feat-desc">Busca entre las marcas más prestigiosas del mundo automotriz. Encuentra el coche de tus
+            sueños con nuestra herramienta de búsqueda avanzada.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feat-icon red">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+          </div>
+          <h3 class="feat-title">Información Detallada</h3>
+          <p class="feat-desc">Accede a especificaciones técnicas completas, historia de cada modelo, y comparativas
+            detalladas para tomar la mejor decisión.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feat-icon slate">
+            <svg viewBox="0 0 24 24">
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+              <polyline points="16 7 22 7 22 13" />
+            </svg>
+          </div>
+          <h3 class="feat-title">Últimas Tendencias</h3>
+          <p class="feat-desc">Mantente al día con los lanzamientos más recientes, innovaciones tecnológicas y
+            tendencias del mercado automotriz mundial.</p>
+        </div>
+      </div>
+
+      <div class="palette-title">Nuestra Paleta de Colores</div>
+      <div class="palette-row">
+        <div class="palette-swatch">
+          <div class="swatch-box" style="background:#2563eb;"></div>
+          <span class="swatch-label">Azul Metálico</span>
+        </div>
+        <div class="palette-swatch">
+          <div class="swatch-box" style="background:#111827;"></div>
+          <span class="swatch-label">Negro</span>
+        </div>
+        <div class="palette-swatch">
+          <div class="swatch-box" style="background:#6b7280;"></div>
+          <span class="swatch-label">Gris</span>
+        </div>
+        <div class="palette-swatch">
+          <div class="swatch-box" style="background:#e53e3e;"></div>
+          <span class="swatch-label">Rojo</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+
+</html>
